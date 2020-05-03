@@ -48,7 +48,7 @@ export const HackerNewsActivity: React.FC<Props> = (p: Props) => {
       let bookmarksPosts: mql.Post[]|undefined = undefined;
       let totalPoints: number = 0;
 
-      if (rsp.socialAccounts && rsp.socialAccounts.length == 1) {
+      if (rsp.socialAccounts && rsp.socialAccounts.length === 1) {
         socialAccount = rsp.socialAccounts[0];
       }
 

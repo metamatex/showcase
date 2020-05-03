@@ -52,7 +52,7 @@ export const getTotalPoints = (posts: mql.Post[]): number => {
 
 export const getCreatedAtDomain = (posts: mql.Post[]): number[] => {
   let accumulator = [0,0];
-  if (posts.length == 0) {
+  if (posts.length === 0) {
     return accumulator
   } else {
     let post = posts[0];
@@ -78,7 +78,7 @@ export const getCreatedAtDomain = (posts: mql.Post[]): number[] => {
 
 export const getMaxDomain = (domains: number[][]): number[] => {
   let accumulator = [0,0];
-  if (domains.length == 0) {
+  if (domains.length === 0) {
     return accumulator
   } else {
     accumulator = domains[0];
