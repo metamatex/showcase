@@ -1,5 +1,7 @@
 [build]
   command = "yarn build"
+  base = "."
+  publish = "./build"
 
 [build.environment]
 HOST = "https://metamate.one"
