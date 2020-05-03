@@ -2,7 +2,7 @@
   command = "yarn build"
 
 [build.environment]
-REACT_APP_HOST = "https://metamate.one"
+HOST = "https://metamate.one"
 
 [[redirects]]
   from = "/*"
