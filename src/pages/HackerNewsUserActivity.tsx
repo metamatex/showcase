@@ -2,16 +2,16 @@ import React from 'react';
 import * as mql from "../mql_";
 import * as YAML from "yaml";
 import {Error} from "../components/Error";
-import * as transform from "./HackerNewsActivity/transform";
-import {Chart} from "./HackerNewsActivity/Chart";
-import {Profile} from "./HackerNewsActivity/Profile";
+import * as transform from "./HackerNewsUserActivity/transform";
+import {Chart} from "./HackerNewsUserActivity/Chart";
+import {Profile} from "./HackerNewsUserActivity/Profile";
 import * as _ from 'lodash';
 
 interface Props {
   client: mql.Client
 }
 
-export const HackerNewsActivity: React.FC<Props> = (p: Props) => {
+export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
   let [username, setUsername] = React.useState("21stio");
   let [isLoading, setIsLoading] = React.useState(false);
   const [socialAccount, setSocialAccount] = React.useState<mql.SocialAccount>();
@@ -130,8 +130,6 @@ export const HackerNewsActivity: React.FC<Props> = (p: Props) => {
   };
 
   return <div>
-    <p>HackerNews Activity</p>
-
     {errors ? errors.map(error => <Error
       error={error}/>) : null}
     <div className="row">

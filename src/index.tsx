@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './static/bootstrap.min.css';
-import {HackerNewsActivity} from './pages/HackerNewsActivity';
+import {HackerNewsUserActivity} from './pages/HackerNewsUserActivity';
+import {Index} from './pages/Index';
+import {App} from './pages/App';
 import {useRoutes} from 'hookrouter';
 import * as mql from "./mql_";
 import axios from "axios";
@@ -14,7 +16,8 @@ let opts: mql.ClientOpts = {
 let c = new mql.Client(opts);
 
 const routes = {
-  '/hackernews-activity': () => <HackerNewsActivity client={c}/>
+  '/': () => <App navColor="#1e5dfa" title="Showcase"><Index/></App>,
+  '/hackernews-user-activity': () => <App title="HackerNews User Activity" navColor="#FF6601"><HackerNewsUserActivity client={c}/></App>
 };
 
 const Root = () => {
