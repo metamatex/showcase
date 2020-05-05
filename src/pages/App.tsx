@@ -14,7 +14,7 @@ export const App: React.FC<Props> = (p: React.PropsWithChildren<Props>) => {
          alt=""/>
       </a>
     </nav>
-    <div className="container-fluid">
+    <div className="container-fluid" style={{"paddingTop": "15px"}}>
           {p.children}
     </div>
   </span>

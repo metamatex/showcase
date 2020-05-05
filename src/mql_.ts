@@ -1468,7 +1468,7 @@ export interface Post {
     relationships?: PostRelationships;
     spoilerText?: Text;
     title?: Text;
-    totalRepliesCount?: number;
+    totalWasRepliedToByPostsCount?: number;
 }
 
 export interface PostFeed {
@@ -1566,7 +1566,7 @@ export interface PostFilter {
     set?: boolean;
     spoilerText?: TextFilter;
     title?: TextFilter;
-    totalRepliesCount?: Int32Filter;
+    totalWasRepliedToByPostsCount?: Int32Filter;
 }
 
 export interface PostListFilter {
@@ -1666,7 +1666,7 @@ export interface PostSelect {
     relationships?: PostRelationshipsSelect;
     spoilerText?: TextSelect;
     title?: TextSelect;
-    totalRepliesCount?: boolean;
+    totalWasRepliedToByPostsCount?: boolean;
 }
 
 export interface PostSort {
@@ -1677,7 +1677,7 @@ export interface PostSort {
     isSensitive?: string;
     spoilerText?: TextSort;
     title?: TextSort;
-    totalRepliesCount?: string;
+    totalWasRepliedToByPostsCount?: string;
 }
 
 export interface RelationGetMode {

@@ -1,12 +1,13 @@
 import * as mql from "../../mql_";
 import * as _ from 'lodash';
+import dayjs from "dayjs";
 
 export const toPointsCommentsTimeseries = (ps: mql.Post[]): { x: number, y: number, z: number, title: string, id: mql.ServiceId }[] => {
   return ps.map((p: mql.Post): { x: number, y: number, z: number, title: string, id: mql.ServiceId } => {
     return {
       x: p.createdAt && p.createdAt.unix && p.createdAt.unix.value ? p.createdAt.unix.value: 0,
       y: p.relations && p.relations.favoredBySocialAccounts && p.relations.favoredBySocialAccounts.count ? p.relations.favoredBySocialAccounts.count: 0,
-      z: p.relations && p.relations.wasRepliedToByPosts && p.relations.wasRepliedToByPosts.count ? p.relations.wasRepliedToByPosts.count : 0,
+      z: p.totalWasRepliedToByPostsCount ? p.totalWasRepliedToByPostsCount : 0,
       title: p.title && p.title.value ? p.title.value: "",
       id: p.id ? p.id: {},
     }
@@ -15,6 +16,17 @@ export const toPointsCommentsTimeseries = (ps: mql.Post[]): { x: number, y: numb
 
 export const toPointsCommentsTimeseriesMap = (psm: {[k: string]: mql.Post[]}): {[k: string]:{ x: number, y: number, z: number }[]} => {
   return _.mapValues(psm, toPointsCommentsTimeseries)
+};
+
+export const toCommentsTimeseries = (ps: mql.Post[]): { x: number, y: number, content: string, id: mql.ServiceId }[] => {
+  return ps.map((p: mql.Post): { x: number, y: number, content: string, id: mql.ServiceId } => {
+    return {
+      x: p.createdAt && p.createdAt.unix && p.createdAt.unix.value ? p.createdAt.unix.value: 0,
+      y: p.relations && p.relations.wasRepliedToByPosts && p.relations.wasRepliedToByPosts.count ? p.relations.wasRepliedToByPosts.count: 0,
+      content: p.content && p.content.value ? p.content.value: "",
+      id: p.id ? p.id: {},
+    }
+  })
 };
 
 export const splitByCategory = (ps: mql.Post[]): { [k: string]:mql.Post[] } => {
@@ -46,6 +58,20 @@ export const serviceIdToString = (id: mql.ServiceId): string => {
 export const getTotalPoints = (posts: mql.Post[]): number => {
   return _.reduce(posts, (sum: number, post: mql.Post) => {
     let a = post && post.relations && post.relations.favoredBySocialAccounts && post.relations.favoredBySocialAccounts.count ? post.relations.favoredBySocialAccounts.count : 0;
+    return sum + a;
+  }, 0)
+};
+
+export const getTotalReplies = (posts: mql.Post[]): number => {
+  return _.reduce(posts, (sum: number, p: mql.Post) => {
+    let a = p.relations && p.relations.wasRepliedToByPosts && p.relations.wasRepliedToByPosts.count ? p.relations.wasRepliedToByPosts.count: 0;
+    return sum + a;
+  }, 0)
+};
+
+export const getTotalTotalReplies = (posts: mql.Post[]): number => {
+  return _.reduce(posts, (sum: number, p: mql.Post) => {
+    let a = p.totalWasRepliedToByPostsCount ? p.totalWasRepliedToByPostsCount : 0;
     return sum + a;
   }, 0)
 };
