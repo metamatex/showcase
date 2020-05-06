@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 
 interface Props {
   title: string
@@ -8,6 +9,7 @@ interface Props {
 export const App: React.FC<Props> = (p: React.PropsWithChildren<Props>) => {
   React.useEffect(() => {
     document.title = p.title;
+    ReactGA.pageview(window.location.pathname + window.location.search);
   });
 
   return <span>

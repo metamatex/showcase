@@ -7,6 +7,8 @@ import {App} from './pages/App';
 import {useRoutes, useInterceptor} from 'hookrouter';
 import * as mql from "./mql_";
 import axios from "axios";
+import ReactGA from 'react-ga';
+ReactGA.initialize('UA-157292681-1');
 
 let opts: mql.ClientOpts = {
   addr: (process.env.REACT_APP_HOST ? process.env.REACT_APP_HOST : "http://localhost") + "/httpjson",
