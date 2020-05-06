@@ -29,7 +29,7 @@ const CustomTooltip = ({active, payload, label}: TooltipProps) => {
 
   return (
     <div style={{"background": "#fff", "border": "2px solid #ddd", "padding": "3px", "borderRadius": "5px",}}>
-      <p>Comment: {payload[0]["payload"]["content"]}</p>
+      <p>Comment: <span dangerouslySetInnerHTML={{__html: payload[0]["payload"]["content"]}}></span></p>
       <p>Date: {dayjs(payload[0]["payload"]["x"] * 1000).format("DD/MM/YYYY")}</p>
       <p>Replies: {payload[0]["payload"]["y"]}</p>
     </div>

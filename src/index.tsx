@@ -4,7 +4,7 @@ import './static/bootstrap.min.css';
 import {HackerNewsUserActivity} from './pages/HackerNewsUserActivity';
 import {Index} from './pages/Index';
 import {App} from './pages/App';
-import {useRoutes} from 'hookrouter';
+import {useRoutes, useInterceptor} from 'hookrouter';
 import * as mql from "./mql_";
 import axios from "axios";
 
@@ -20,8 +20,19 @@ const routes = {
   '/hackernews-user-activity': () => <App title="HackerNews User Activity" navColor="#FF6601"><HackerNewsUserActivity client={c}/></App>
 };
 
+const trackInterceptor = (nextPath: string, currentPath: string) => {
+  console.log(currentPath);
+  console.log(nextPath);
+
+  return nextPath;
+};
+
 const Root = () => {
   const routeResult = useRoutes(routes);
+
+  const trackInterception = useInterceptor(trackInterceptor);
+
+  trackInterception();
 
   return routeResult || 'Page Not Found';
 };

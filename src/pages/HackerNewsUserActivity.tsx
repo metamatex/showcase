@@ -122,7 +122,7 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
   };
 
   const renderSubmissionsChart = () => {
-    if (authorsPosts.length == 0) {
+    if (authorsPosts.length === 0) {
       return
     }
 
@@ -143,7 +143,7 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
   };
 
   const renderFavoritesChart = () => {
-    if (bookmarksPosts.length == 0) {
+    if (bookmarksPosts.length === 0) {
       return
     }
 
@@ -160,7 +160,7 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
   };
 
   const renderRepliesChart = () => {
-    if (authorsReplies.length == 0) {
+    if (authorsReplies.length === 0) {
       return
     }
 

@@ -1,6 +1,5 @@
 import * as mql from "../../mql_";
 import * as _ from 'lodash';
-import dayjs from "dayjs";
 
 export const toPointsCommentsTimeseries = (ps: mql.Post[]): { x: number, y: number, z: number, title: string, id: mql.ServiceId }[] => {
   return ps.map((p: mql.Post): { x: number, y: number, z: number, title: string, id: mql.ServiceId } => {
@@ -111,11 +110,11 @@ export const getMaxDomain = (domains: number[][]): number[] => {
   }
 
   return _.reduce(domains, (accumulator: number[], domain: number[]) => {
-    if (domain[0] < accumulator[0]) {
+    if (domain[0] !== 0 && domain[0] < accumulator[0]) {
       accumulator[0] = domain[0]
     }
 
-    if (domain[1] > accumulator[1]) {
+    if (domain[1] !== 0 && domain[1] > accumulator[1]) {
       accumulator[1] = domain[1]
     }
 
