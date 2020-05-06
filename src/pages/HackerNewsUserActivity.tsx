@@ -1,6 +1,5 @@
 import React from 'react';
 import * as mql from "../mql_";
-import * as YAML from "yaml";
 import './HackerNewsUserActivity/style.css';
 import {Error} from "../components/Error";
 import * as transform from "./HackerNewsUserActivity/transform";
@@ -27,9 +26,6 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
   const [totalReplies, setTotalReplies] = React.useState<number>();
 
   const isMobile = (window.screen.width) < 576;
-
-  console.log(isMobile);
-  console.log((window.screen.width));
 
   const loadSocialAccount = () => {
     setIsLoading(true);
@@ -196,7 +192,6 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
       <div className="col-12 col-md-3">
         <div className="input-group mb-3">
           <input type="text" className="form-control" placeholder="username"
-                 value={username}
                  onChange={(e: any) => setUsername(e.target.value)}
                  onKeyDown={(e: any) => e.key === "Enter" ? loadSocialAccount() : null}/>
           <div className="input-group-append">
@@ -212,6 +207,14 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
           </div>
         </div>
         {renderProfile()}
+        <div className="alert alert-success" role="alert">
+          <h5>How?</h5>
+          <p>This app uses MetaMeta under the hood. Everything the client needs to do to obtain the data is run the following query. MetaMate takes care of aggregating all the data under the hood.</p>
+          <div style={{background: '#ffffff', fontSize: "13.5px", overflow: 'auto', width: 'auto', border: 'solid gray', borderWidth: '.1em .1em .1em .1em', padding: '.2em .6em'}}><pre style={{margin: 0, lineHeight: '125%'}}><span style={{color: '#228899', fontWeight: 'bold'}}>let</span> rsp <span style={{color: '#333333'}}>=</span> await client.GetSocialAccounts({"{"}{"\n"}{"  "}mode<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"    "}id<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"      "}serviceId<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"        "}serviceName<span style={{color: '#333333'}}>:</span> <span style={{backgroundColor: '#e0e0ff'}}>"hackernews"</span>,{"\n"}{"        "}value: <span style={{color: '#6666ff', fontWeight: 'bold'}}>username</span>,{"\n"}{"      "}{"}"}{"\n"}{"    "}{"}"},{"\n"}{"  "}{"}"},{"\n"}{"  "}relations<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"    "}authorsPosts<span style={{color: '#333333'}}>:</span> {"{"}{"}"},{"\n"}{"    "}bookmarksPosts<span style={{color: '#333333'}}>:</span> {"{"}{"}"},{"\n"}{"  "}{"}"}{"\n"}{"}"});{"\n"}</pre></div>
+          <hr/>
+          <p>If you want to play with MetaMates HackerNews service look here  <a href="https://metamate.io/blog/most-advanced-hackernews-api/">Most advanced HackerNews API</a></p>
+
+        </div>
       </div>
       <div className="col-12 col-md-9">
         {renderSubmissionsChart()}

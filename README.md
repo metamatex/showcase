@@ -16,3 +16,7 @@ To build the app run `yarn build`
 
 To start the app run `yarn start`
 
+## Operations
+
+The code previews are generated with [hilite.me](http://hilite.me/) and converted to JSX with [magic.reactjs.net](https://magic.reactjs.net/htmltojsx.htm)
+
