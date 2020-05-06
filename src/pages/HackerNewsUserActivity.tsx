@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 
 interface Props {
   client: mql.Client
+  color: string;
 }
 
 export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
@@ -177,7 +178,18 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
       return
     }
 
-    return <Profile socialAccount={socialAccount}/>
+    return <Profile color={p.color} socialAccount={socialAccount}/>
+  };
+
+  const renderInfo = () => {
+    return <>
+      <h5>How?</h5>
+      <p>This app is powered by MetaMate. For the client to obtain all the data it needs, it simply sends the following query, and MetaMate aggregates the requested data under the hood</p>
+      <div style={{background: '#ffffff', fontSize: "13.5px", overflow: 'auto', width: 'auto', border: 'solid gray', borderWidth: '.1em .1em .1em .1em', padding: '.2em .6em'}}><pre style={{margin: 0, lineHeight: '125%'}}><span style={{color: '#228899', fontWeight: 'bold'}}>let</span> rsp <span style={{color: '#333333'}}>=</span> await client.GetSocialAccounts({"{"}{"\n"}{"  "}mode<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"    "}id<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"      "}serviceId<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"        "}serviceName<span style={{color: '#333333'}}>:</span> <span style={{backgroundColor: '#e0e0ff'}}>"hackernews"</span>,{"\n"}{"        "}value: <span style={{color: '#6666ff', fontWeight: 'bold'}}>username</span>,{"\n"}{"      "}{"}"}{"\n"}{"    "}{"}"},{"\n"}{"  "}{"}"},{"\n"}{"  "}relations<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"    "}authorsPosts<span style={{color: '#333333'}}>:</span> {"{"}{"}"},{"\n"}{"    "}bookmarksPosts<span style={{color: '#333333'}}>:</span> {"{"}{"}"},{"\n"}{"  "}{"}"}{"\n"}{"}"});{"\n"}</pre></div>
+      <p><a target="_blank" rel="noopener " style={{"color": p.color}} href="https://github.com/metamatex/showcase">Source code</a></p>
+      <hr/>
+      <p>Check out MetaMate's HackerNews service here:  <a target="_blank" rel="noopener " style={{"color": p.color}} href="https://metamate.io/blog/most-advanced-hackernews-api/">Most advanced HackerNews API</a></p>
+    </>
   };
 
   return <div>
@@ -207,19 +219,17 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
           </div>
         </div>
         {renderProfile()}
-        <div className="alert alert-success" role="alert">
-          <h5>How?</h5>
-          <p>This app uses MetaMeta under the hood. Everything the client needs to do to obtain the data is run the following query. MetaMate takes care of aggregating all the data under the hood.</p>
-          <div style={{background: '#ffffff', fontSize: "13.5px", overflow: 'auto', width: 'auto', border: 'solid gray', borderWidth: '.1em .1em .1em .1em', padding: '.2em .6em'}}><pre style={{margin: 0, lineHeight: '125%'}}><span style={{color: '#228899', fontWeight: 'bold'}}>let</span> rsp <span style={{color: '#333333'}}>=</span> await client.GetSocialAccounts({"{"}{"\n"}{"  "}mode<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"    "}id<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"      "}serviceId<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"        "}serviceName<span style={{color: '#333333'}}>:</span> <span style={{backgroundColor: '#e0e0ff'}}>"hackernews"</span>,{"\n"}{"        "}value: <span style={{color: '#6666ff', fontWeight: 'bold'}}>username</span>,{"\n"}{"      "}{"}"}{"\n"}{"    "}{"}"},{"\n"}{"  "}{"}"},{"\n"}{"  "}relations<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"    "}authorsPosts<span style={{color: '#333333'}}>:</span> {"{"}{"}"},{"\n"}{"    "}bookmarksPosts<span style={{color: '#333333'}}>:</span> {"{"}{"}"},{"\n"}{"  "}{"}"}{"\n"}{"}"});{"\n"}</pre></div>
-          <hr/>
-          <p>If you want to play with MetaMates HackerNews service look here  <a href="https://metamate.io/blog/most-advanced-hackernews-api/">Most advanced HackerNews API</a></p>
-
+        <div className="alert alert-success d-none d-md-block" role="alert">
+          {renderInfo()}
         </div>
       </div>
       <div className="col-12 col-md-9">
         {renderSubmissionsChart()}
         {renderRepliesChart()}
         {renderFavoritesChart()}
+        <div className="alert alert-success d-md-none" role="alert">
+          {renderInfo()}
+        </div>
       </div>
     </div>
     {/*<textarea value={YAML.stringify(authorsReplies)} readOnly style={{"width": "100%", "height": "2000px",}}/>*/}
