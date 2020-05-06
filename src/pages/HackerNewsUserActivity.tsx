@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
-  let [username, setUsername] = React.useState("21stio");
+  let [username, setUsername] = React.useState("");
   let [isLoading, setIsLoading] = React.useState(false);
   const [socialAccount, setSocialAccount] = React.useState<mql.SocialAccount>();
   const [errors, setErrors] = React.useState<mql.Error[]>();
@@ -189,7 +189,7 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
       error={error}/>) : null}
     <div className="row">
       <div className="col-12">
-        <p>Enter a username to see statistics for submissions, comments and favorites</p>
+        <p>Enter a HackerNews username to see statistics for submissions, comments and favorites</p>
       </div>
     </div>
     <div className="row">
