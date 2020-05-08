@@ -192,6 +192,7 @@ export interface AttachmentsCollection {
     count?: number;
     errors?: Error[];
     pagination?: Pagination;
+    warnings?: Warning[];
 }
 
 export interface AttachmentsCollectionSelect {
@@ -200,6 +201,7 @@ export interface AttachmentsCollectionSelect {
     count?: boolean;
     errors?: ErrorSelect;
     pagination?: PaginationSelect;
+    warnings?: WarningSelect;
 }
 
 export interface AttachmentSelect {
@@ -497,6 +499,7 @@ export interface GetAttachmentsResponseFilter {
     or?: GetAttachmentsResponseFilter[];
     pagination?: PaginationFilter;
     set?: boolean;
+    warnings?: WarningListFilter;
 }
 
 export interface GetBlueWhateversEndpoint {
@@ -529,6 +532,7 @@ export interface GetBlueWhateversResponseFilter {
     or?: GetBlueWhateversResponseFilter[];
     pagination?: PaginationFilter;
     set?: boolean;
+    warnings?: WarningListFilter;
 }
 
 export interface GetMode {
@@ -602,6 +606,7 @@ export interface GetPostFeedsResponse {
     errors?: Error[];
     pagination?: Pagination;
     postFeeds?: PostFeed[];
+    warnings?: Warning[];
 }
 
 export interface GetPostFeedsResponseFilter {
@@ -613,6 +618,7 @@ export interface GetPostFeedsResponseFilter {
     pagination?: PaginationFilter;
     postFeeds?: PostFeedListFilter;
     set?: boolean;
+    warnings?: WarningListFilter;
 }
 
 export interface GetPostFeedsResponseSelect {
@@ -621,6 +627,7 @@ export interface GetPostFeedsResponseSelect {
     errors?: ErrorSelect;
     pagination?: PaginationSelect;
     postFeeds?: PostFeedSelect;
+    warnings?: WarningSelect;
 }
 
 export interface GetPostsCollection {
@@ -687,6 +694,7 @@ export interface GetPostsResponse {
     errors?: Error[];
     pagination?: Pagination;
     posts?: Post[];
+    warnings?: Warning[];
 }
 
 export interface GetPostsResponseFilter {
@@ -698,6 +706,7 @@ export interface GetPostsResponseFilter {
     pagination?: PaginationFilter;
     posts?: PostListFilter;
     set?: boolean;
+    warnings?: WarningListFilter;
 }
 
 export interface GetPostsResponseSelect {
@@ -706,6 +715,7 @@ export interface GetPostsResponseSelect {
     errors?: ErrorSelect;
     pagination?: PaginationSelect;
     posts?: PostSelect;
+    warnings?: WarningSelect;
 }
 
 export interface GetServicesEndpoint {
@@ -738,6 +748,7 @@ export interface GetServicesResponseFilter {
     pagination?: PaginationFilter;
     services?: ServiceListFilter;
     set?: boolean;
+    warnings?: WarningListFilter;
 }
 
 export interface GetSocialAccountsCollection {
@@ -807,6 +818,7 @@ export interface GetSocialAccountsResponse {
     errors?: Error[];
     pagination?: Pagination;
     socialAccounts?: SocialAccount[];
+    warnings?: Warning[];
 }
 
 export interface GetSocialAccountsResponseFilter {
@@ -818,6 +830,7 @@ export interface GetSocialAccountsResponseFilter {
     pagination?: PaginationFilter;
     set?: boolean;
     socialAccounts?: SocialAccountListFilter;
+    warnings?: WarningListFilter;
 }
 
 export interface GetSocialAccountsResponseSelect {
@@ -826,6 +839,7 @@ export interface GetSocialAccountsResponseSelect {
     errors?: ErrorSelect;
     pagination?: PaginationSelect;
     socialAccounts?: SocialAccountSelect;
+    warnings?: WarningSelect;
 }
 
 export interface GetWhateversEndpoint {
@@ -857,6 +871,7 @@ export interface GetWhateversResponseFilter {
     or?: GetWhateversResponseFilter[];
     pagination?: PaginationFilter;
     set?: boolean;
+    warnings?: WarningListFilter;
     whatevers?: WhateverListFilter;
 }
 
@@ -1524,6 +1539,7 @@ export interface PostFeedsCollection {
     errors?: Error[];
     pagination?: Pagination;
     postFeeds?: PostFeed[];
+    warnings?: Warning[];
 }
 
 export interface PostFeedsCollectionSelect {
@@ -1532,6 +1548,7 @@ export interface PostFeedsCollectionSelect {
     errors?: ErrorSelect;
     pagination?: PaginationSelect;
     postFeeds?: PostFeedSelect;
+    warnings?: WarningSelect;
 }
 
 export interface PostFeedSelect {
@@ -1642,6 +1659,7 @@ export interface PostsCollection {
     errors?: Error[];
     pagination?: Pagination;
     posts?: Post[];
+    warnings?: Warning[];
 }
 
 export interface PostsCollectionSelect {
@@ -1650,6 +1668,7 @@ export interface PostsCollectionSelect {
     errors?: ErrorSelect;
     pagination?: PaginationSelect;
     posts?: PostSelect;
+    warnings?: WarningSelect;
 }
 
 export interface PostSelect {
@@ -1927,6 +1946,7 @@ export interface SocialAccountsCollection {
     errors?: Error[];
     pagination?: Pagination;
     socialAccounts?: SocialAccount[];
+    warnings?: Warning[];
 }
 
 export interface SocialAccountsCollectionSelect {
@@ -1935,6 +1955,7 @@ export interface SocialAccountsCollectionSelect {
     errors?: ErrorSelect;
     pagination?: PaginationSelect;
     socialAccounts?: SocialAccountSelect;
+    warnings?: WarningSelect;
 }
 
 export interface SocialAccountSelect {
@@ -2056,6 +2077,29 @@ export interface UrlSelect {
 
 export interface UrlSort {
     value?: string;
+}
+
+export interface Warning {
+    message?: string;
+}
+
+export interface WarningFilter {
+    and?: WarningFilter[];
+    message?: StringFilter;
+    not?: WarningFilter[];
+    or?: WarningFilter[];
+    set?: boolean;
+}
+
+export interface WarningListFilter {
+    every?: WarningFilter;
+    none?: WarningFilter;
+    some?: WarningFilter;
+}
+
+export interface WarningSelect {
+    all?: boolean;
+    message?: boolean;
 }
 
 export interface WhateverFilter {

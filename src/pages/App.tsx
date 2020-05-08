@@ -19,7 +19,7 @@ export const App: React.FC<Props> = (p: React.PropsWithChildren<Props>) => {
              alt=""/>
         &nbsp;&nbsp;{p.title}
       </a>
-      <ul className="navbar-nav mr-auto">
+      <ul className="navbar-nav">
         <li className="nav-item">
           <a className="nav-link" href="https://metamate.io" target="_blank" rel="noopener">Website</a>
         </li>

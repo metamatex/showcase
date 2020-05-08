@@ -41,7 +41,7 @@ const CustomTooltip = ({active, payload, label}: TooltipProps) => {
   );
 };
 
-export const Chart: React.FC<Props> = (p: Props) => {
+export const Chart: React.FC<Props> = React.memo((p: Props) => {
   const openNewTab = (e: any) => {
     Object.assign(document.createElement('a'), { target: '_blank', href: 'https://news.ycombinator.com/item?id=' + e.id.value}).click();
   };
@@ -69,4 +69,4 @@ export const Chart: React.FC<Props> = (p: Props) => {
       </ScatterChart>
     </ResponsiveContainer>
   )
-};
+});

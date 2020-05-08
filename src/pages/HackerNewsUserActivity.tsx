@@ -7,6 +7,7 @@ import {Chart} from "./HackerNewsUserActivity/Chart";
 import {CommentsChart} from "./HackerNewsUserActivity/CommentsChart";
 import {Profile} from "./HackerNewsUserActivity/Profile";
 import * as _ from 'lodash';
+import {Warning} from "../components/Warning";
 
 interface Props {
   client: mql.Client
@@ -19,12 +20,14 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
   const [socialAccount, setSocialAccount] = React.useState<mql.SocialAccount>();
   const [errors, setErrors] = React.useState<mql.Error[]>();
   const [authorsPosts, setAuthorsPosts] = React.useState<mql.Post[]>([]);
+  const [authorsPostsWarnings, setAuthorsPostsWarnings] = React.useState<mql.Warning[]>();
   const [authorsReplies, setAuthorsReplies] = React.useState<mql.Post[]>([]);
   const [bookmarksPosts, setBookmarksPosts] = React.useState<mql.Post[]>([]);
+  const [bookmarksPostsWarnings, setBookmarksPostsWarnings] = React.useState<mql.Warning[]>();
   const [maxDomain, setMaxDomain] = React.useState<number[]>([]);
-  const [totalPoints, setTotalPoints] = React.useState<number>();
-  const [totalTotalReplies, setTotalTotalReplies] = React.useState<number>();
-  const [totalReplies, setTotalReplies] = React.useState<number>();
+  const [totalPoints, setTotalPoints] = React.useState<number>(0);
+  const [totalTotalReplies, setTotalTotalReplies] = React.useState<number>(0);
+  const [totalReplies, setTotalReplies] = React.useState<number>(0);
 
   const isMobile = (window.screen.width) < 576;
 
@@ -49,10 +52,14 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
         }
       });
 
+      console.log(rsp);
+
       let socialAccount: mql.SocialAccount | undefined = undefined;
       let authorsPosts: mql.Post[] = [];
+      let authorsPostsWarnings: mql.Warning[] = [];
       let authorsReplies: mql.Post[] = [];
       let bookmarksPosts: mql.Post[] = [];
+      let bookmarksPostsWarnings: mql.Warning[] = [];
       let totalPoints: number = 0;
       let totalReplies: number = 0;
       let totalTotalReplies: number = 0;
@@ -81,28 +88,48 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
         totalPoints = transform.getTotalPoints(authorsPosts);
         totalTotalReplies = transform.getTotalTotalReplies(authorsPosts);
         totalReplies = transform.getTotalReplies(authorsReplies);
+
+        if (socialAccount.relations.authorsPosts.warnings) {
+          authorsPostsWarnings = socialAccount.relations.authorsPosts.warnings;
+        } else {
+          authorsPostsWarnings = [];
+        }
       }
 
       if (socialAccount && socialAccount.relations && socialAccount.relations.bookmarksPosts && socialAccount.relations.bookmarksPosts.posts) {
         bookmarksPosts = socialAccount.relations.bookmarksPosts.posts;
+
+        if (socialAccount.relations.bookmarksPosts.warnings) {
+          bookmarksPostsWarnings = socialAccount.relations.bookmarksPosts.warnings;
+        } else {
+          bookmarksPostsWarnings = [];
+        }
       }
 
-      let authorsPostsDomain = transform.getCreatedAtDomain(authorsPosts);
-      let bookmarksPostsDomain = transform.getCreatedAtDomain(bookmarksPosts);
-      let authorsRepliesDomain = transform.getCreatedAtDomain(authorsReplies);
+      let domains: number[][] = [];
 
-      let maxDomain = transform.getMaxDomain([
-        authorsPostsDomain,
-        bookmarksPostsDomain,
-        authorsRepliesDomain,
-      ]);
+      if (authorsPosts.length > 0) {
+        domains.push(transform.getCreatedAtDomain(authorsPosts))
+      }
+
+      if (bookmarksPosts.length > 0) {
+        domains.push(transform.getCreatedAtDomain(bookmarksPosts))
+      }
+
+      if (authorsReplies.length > 0) {
+        domains.push(transform.getCreatedAtDomain(authorsReplies))
+      }
+
+      let maxDomain = transform.getMaxDomain(domains);
 
       setMaxDomain(maxDomain);
 
       setIsLoading(false);
       setSocialAccount(socialAccount);
       setAuthorsPosts(authorsPosts);
+      setAuthorsPostsWarnings(authorsPostsWarnings);
       setBookmarksPosts(bookmarksPosts);
+      setBookmarksPostsWarnings(bookmarksPostsWarnings);
       setAuthorsReplies(authorsReplies);
       setTotalPoints(totalPoints);
       setTotalReplies(totalReplies);
@@ -112,31 +139,12 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
     fetch().catch((reason: any) => {
       setIsLoading(false);
 
+      console.log(reason);
+
       setErrors([{
         message: reason.message,
       }])
     });
-  };
-
-  const renderSubmissionsChart = () => {
-    if (authorsPosts.length === 0) {
-      return
-    }
-
-    let postsPerCategory = transform.splitByCategory(authorsPosts);
-
-    let psm = transform.toPointsCommentsTimeseriesMap(postsPerCategory);
-
-    return <div>
-      <span style={{"fontSize": "20px"}}>{authorsPosts.length} Submissions</span><br/>
-      <span>total points: {totalPoints}</span>&nbsp;&nbsp;&nbsp;
-      <span>avg points: {Math.round(((totalPoints ? totalPoints : 1) / authorsPosts.length) * 100) / 100}</span><br/>
-      <span>total comments: {totalTotalReplies}</span>&nbsp;&nbsp;&nbsp;
-      <span>avg comments: {Math.round(((totalTotalReplies ? totalTotalReplies : 1) / authorsPosts.length) * 100) / 100}</span><br/>
-      <br/>
-      <span>points</span>
-      <Chart isMobile={isMobile} domain={maxDomain} points={psm}/>
-    </div>
   };
 
   const renderFavoritesChart = () => {
@@ -156,23 +164,6 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
     </div>
   };
 
-  const renderRepliesChart = () => {
-    if (authorsReplies.length === 0) {
-      return
-    }
-
-    let psm = transform.toCommentsTimeseries(authorsReplies);
-
-    return <div>
-      <span style={{"fontSize": "20px"}}>{authorsReplies.length} Comments</span><br/>
-      <span>total replies: {totalReplies}</span>&nbsp;&nbsp;&nbsp;
-      <span>avg replies: {Math.round(((totalReplies ? totalReplies : 1) / authorsReplies.length) * 100) / 100}</span><br/>
-      <br/>
-      <span>replies</span>
-      <CommentsChart domain={maxDomain} points={psm} isMobile={isMobile}/>
-    </div>
-  };
-
   const renderProfile = () => {
     if (!socialAccount || !totalPoints) {
       return
@@ -181,14 +172,42 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
     return <Profile color={p.color} socialAccount={socialAccount}/>
   };
 
+  console.log("a");
+
   const renderInfo = () => {
     return <>
       <h5>How?</h5>
-      <p>This app is powered by MetaMate. For the client to obtain all the data it needs, it simply sends the following query, and MetaMate aggregates the requested data under the hood</p>
-      <div style={{background: '#ffffff', fontSize: "13.5px", overflow: 'auto', width: 'auto', border: 'solid gray', borderWidth: '.1em .1em .1em .1em', padding: '.2em .6em'}}><pre style={{margin: 0, lineHeight: '125%'}}><span style={{color: '#228899', fontWeight: 'bold'}}>let</span> rsp <span style={{color: '#333333'}}>=</span> await client.GetSocialAccounts({"{"}{"\n"}{"  "}mode<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"    "}id<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"      "}serviceId<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"        "}serviceName<span style={{color: '#333333'}}>:</span> <span style={{backgroundColor: '#e0e0ff'}}>"hackernews"</span>,{"\n"}{"        "}value: <span style={{color: '#6666ff', fontWeight: 'bold'}}>username</span>,{"\n"}{"      "}{"}"}{"\n"}{"    "}{"}"},{"\n"}{"  "}{"}"},{"\n"}{"  "}relations<span style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"    "}authorsPosts<span style={{color: '#333333'}}>:</span> {"{"}{"}"},{"\n"}{"    "}bookmarksPosts<span style={{color: '#333333'}}>:</span> {"{"}{"}"},{"\n"}{"  "}{"}"}{"\n"}{"}"});{"\n"}</pre></div>
-      <p><a target="_blank" rel="noopener " style={{"color": p.color}} href="https://github.com/metamatex/showcase">Source code</a></p>
+      <p>This app is powered by MetaMate. For the client to obtain all the data it needs, it simply sends the following
+        query, and MetaMate aggregates the requested data under the hood</p>
+      <div style={{
+        background: '#ffffff',
+        fontSize: "13.5px",
+        overflow: 'auto',
+        width: 'auto',
+        border: 'solid gray',
+        borderWidth: '.1em .1em .1em .1em',
+        padding: '.2em .6em'
+      }}>
+        <pre style={{margin: 0, lineHeight: '125%'}}><span
+          style={{color: '#228899', fontWeight: 'bold'}}>let</span> rsp <span style={{color: '#333333'}}>=</span> await client.GetSocialAccounts({"{"}{"\n"}{"  "}mode<span
+          style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"    "}id<span
+          style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"      "}serviceId<span
+          style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"        "}serviceName<span
+          style={{color: '#333333'}}>:</span> <span
+          style={{backgroundColor: '#e0e0ff'}}>"hackernews"</span>,{"\n"}{"        "}value: <span style={{
+          color: '#6666ff',
+          fontWeight: 'bold'
+        }}>username</span>,{"\n"}{"      "}{"}"}{"\n"}{"    "}{"}"},{"\n"}{"  "}{"}"},{"\n"}{"  "}relations<span
+          style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"    "}authorsPosts<span
+          style={{color: '#333333'}}>:</span> {"{"}{"}"},{"\n"}{"    "}bookmarksPosts<span
+          style={{color: '#333333'}}>:</span> {"{"}{"}"},{"\n"}{"  "}{"}"}{"\n"}{"}"});{"\n"}</pre>
+      </div>
+      <p><a target="_blank" rel="noopener " style={{"color": p.color}} href="https://github.com/metamatex/showcase">Source
+        code</a></p>
       <hr/>
-      <p>Check out MetaMate's HackerNews service here:  <a target="_blank" rel="noopener " style={{"color": p.color}} href="https://metamate.io/blog/most-advanced-hackernews-api/">Most advanced HackerNews API</a></p>
+      <p>Check out MetaMate's HackerNews service here: <a target="_blank" rel="noopener " style={{"color": p.color}}
+                                                          href="https://metamate.io/blog/most-advanced-hackernews-api/">Most
+        advanced HackerNews API</a></p>
     </>
   };
 
@@ -224,8 +243,14 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
         </div>
       </div>
       <div className="col-12 col-md-9">
-        {renderSubmissionsChart()}
-        {renderRepliesChart()}
+        {authorsPostsWarnings ? authorsPostsWarnings.map(warning => <Warning
+          warning={warning}/>) : null}
+        <SubmissionsChart authorsPosts={authorsPosts} domain={maxDomain} isMobile={isMobile} totalPoints={totalPoints}
+                          totalTotalReplies={totalTotalReplies}/>
+        <RepliesChart authorsReplies={authorsReplies} domain={maxDomain} isMobile={isMobile}
+                      totalReplies={totalReplies}/>
+        {bookmarksPostsWarnings ? bookmarksPostsWarnings.map(warning => <Warning
+          warning={warning}/>) : null}
         {renderFavoritesChart()}
         <div className="alert alert-success d-md-none" role="alert">
           {renderInfo()}
@@ -235,3 +260,56 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
     {/*<textarea value={YAML.stringify(authorsReplies)} readOnly style={{"width": "100%", "height": "2000px",}}/>*/}
   </div>
 };
+
+interface SubmissionsChartProps {
+  authorsPosts: mql.Post[]
+  domain: number[];
+  isMobile: boolean;
+  totalPoints: number;
+  totalTotalReplies: number;
+}
+
+export const SubmissionsChart: React.FC<SubmissionsChartProps> = React.memo((p: SubmissionsChartProps) => {
+  if (p.authorsPosts.length === 0) {
+    return null;
+  }
+
+  let postsPerCategory = transform.splitByCategory(p.authorsPosts);
+
+  let psm = transform.toPointsCommentsTimeseriesMap(postsPerCategory);
+
+  return <div>
+    <span style={{"fontSize": "20px"}}>{p.authorsPosts.length} Submissions</span><br/>
+    <span>total points: {p.totalPoints}</span>&nbsp;&nbsp;&nbsp;
+    <span>avg points: {Math.round(((p.totalPoints ? p.totalPoints : 1) / p.authorsPosts.length) * 100) / 100}</span><br/>
+    <span>total comments: {p.totalTotalReplies}</span>&nbsp;&nbsp;&nbsp;
+    <span>avg comments: {Math.round(((p.totalTotalReplies ? p.totalTotalReplies : 1) / p.authorsPosts.length) * 100) / 100}</span><br/>
+    <br/>
+    <span>points</span>
+    <Chart isMobile={p.isMobile} domain={p.domain} points={psm}/>
+  </div>
+});
+
+interface RepliesChartProps {
+  authorsReplies: mql.Post[]
+  domain: number[];
+  isMobile: boolean;
+  totalReplies: number;
+}
+
+export const RepliesChart: React.FC<RepliesChartProps> = React.memo((p: RepliesChartProps) => {
+  if (p.authorsReplies.length === 0) {
+    return null;
+  }
+
+  let psm = transform.toCommentsTimeseries(p.authorsReplies);
+
+  return <div>
+    <span style={{"fontSize": "20px"}}>{p.authorsReplies.length} Comments</span><br/>
+    <span>total replies: {p.totalReplies}</span>&nbsp;&nbsp;&nbsp;
+    <span>avg replies: {Math.round(((p.totalReplies ? p.totalReplies : 1) / p.authorsReplies.length) * 100) / 100}</span><br/>
+    <br/>
+    <span>replies</span>
+    <CommentsChart domain={p.domain} points={psm} isMobile={p.isMobile}/>
+  </div>
+});
