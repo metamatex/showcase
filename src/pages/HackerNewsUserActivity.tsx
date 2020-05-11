@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
-  let [username, setUsername] = React.useState("leif");
+  let [username, setUsername] = React.useState("");
   let [isLoading, setIsLoading] = React.useState(false);
   const [socialAccount, setSocialAccount] = React.useState<mql.SocialAccount>();
   const [errors, setErrors] = React.useState<mql.Error[]>();
@@ -28,12 +28,6 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
   const [totalPoints, setTotalPoints] = React.useState<number>(0);
   const [totalTotalReplies, setTotalTotalReplies] = React.useState<number>(0);
   const [totalReplies, setTotalReplies] = React.useState<number>(0);
-  const [done, setDone] = React.useState<boolean>(false);
-
-  React.useEffect(() =>{
-    loadSocialAccount(username);
-    setDone(true);
-  }, [done]);
 
   const isMobile = (window.screen.width) < 576;
 
