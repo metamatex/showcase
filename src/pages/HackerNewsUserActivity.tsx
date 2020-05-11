@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
-  let [username, setUsername] = React.useState("");
+  let [username, setUsername] = React.useState("leif");
   let [isLoading, setIsLoading] = React.useState(false);
   const [socialAccount, setSocialAccount] = React.useState<mql.SocialAccount>();
   const [errors, setErrors] = React.useState<mql.Error[]>();
@@ -28,10 +28,20 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
   const [totalPoints, setTotalPoints] = React.useState<number>(0);
   const [totalTotalReplies, setTotalTotalReplies] = React.useState<number>(0);
   const [totalReplies, setTotalReplies] = React.useState<number>(0);
+  const [done, setDone] = React.useState<boolean>(false);
+
+  React.useEffect(() =>{
+    loadSocialAccount(username);
+    setDone(true);
+  }, [done]);
 
   const isMobile = (window.screen.width) < 576;
 
-  const loadSocialAccount = () => {
+  const loadSocialAccount = (username: string) => {
+    if (isLoading) {
+      return;
+    }
+
     setIsLoading(true);
 
     const fetch = async () => {
@@ -224,10 +234,11 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
         <div className="input-group mb-3">
           <input type="text" className="form-control" placeholder="username"
                  onChange={(e: any) => setUsername(e.target.value)}
-                 onKeyDown={(e: any) => e.key === "Enter" ? loadSocialAccount() : null}/>
+                 onKeyDown={(e: any) => e.key === "Enter" ? loadSocialAccount(username) : null}
+                 value={username}/>
           <div className="input-group-append">
             <button className="btn btn-outline-secondary" type="button"
-                    onClick={(e: any) => loadSocialAccount()}>
+                    onClick={(e: any) => loadSocialAccount(username)}>
               {isLoading ? <span>
               <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
               <span> Loading...</span>
