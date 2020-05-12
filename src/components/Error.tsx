@@ -16,12 +16,12 @@ export const Error: React.FC<Props> = (p: Props) => {
 
 export const IdNotPresentError: React.FC<Props> = (p: Props) => {
   return <div className="alert alert-danger" role="alert">
-    id not found
+    id not found {p.error && p.error.service && p.error.service.id && p.error.service.id.value ? "(Service: " + p.error.service.id.value + ")" : null}
   </div>
 };
 
 export const MessageError: React.FC<Props> = (p: Props) => {
   return <div className="alert alert-danger" role="alert">
-    <p>{p.error.message}</p>
+    <p>{p.error.message} {p.error && p.error.service && p.error.service.id && p.error.service.id.value ? "(Service: " + p.error.service.id.value + ")" : null}</p>
   </div>
 };
