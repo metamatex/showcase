@@ -179,5 +179,6 @@ export const getTopHost = (posts: mql.Post[]): {host: string, count: number}[] =
     })
     .sortBy("count")
     .reverse()
+    .filter((v: {host: string, count: number}) => v.host != "")
     .value();
 };

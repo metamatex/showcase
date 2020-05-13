@@ -34,7 +34,7 @@ export const TopAuthorsChart: React.FC<Props> = React.memo((p: Props) => {
 
   return (
     <ResponsiveContainer width="100%" height={1000}>
-      <BarChart margin={{top: 20, right: 20, bottom: 10, left: 30}} data={p.points} layout="vertical">
+      <BarChart margin={{top: 20, right: 20, bottom: 10, left: 50}} data={p.points} layout="vertical">
         <CartesianGrid strokeDasharray="1 5"/>
         <XAxis type="number"/>
         <YAxis type="category" dataKey="author"/>
