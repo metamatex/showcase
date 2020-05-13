@@ -144,3 +144,40 @@ export const toMonthlyPointsCommentsSubmissionsTimeseries = (domain: number[], p
 
   return merged;
 };
+
+export const getTopPoster = (posts: mql.Post[]): {author: string, count: number}[] => {
+  return _.chain(posts)
+    .groupBy((p: mql.Post) => {
+      if (p.relations && p.relations.authoredBySocialAccount && p.relations.authoredBySocialAccount.id && p.relations.authoredBySocialAccount.id.value) {
+        return p.relations.authoredBySocialAccount.id.value;
+      }
+
+      return ""
+    })
+    .mapValues((posts: mql.Post[]) => posts.length)
+    .map((v: number, k: string) => {
+      return {author: k, count: v}
+    })
+    .sortBy("count")
+    .reverse()
+    .value();
+};
+
+export const getTopHost = (posts: mql.Post[]): {host: string, count: number}[] => {
+  return _.chain(posts)
+    .groupBy((p: mql.Post) => {
+      if (p.links && p.links.length > 0 && p.links[0].url  && p.links[0].url.value) {
+        let parts = new URL(p.links[0].url.value).hostname.split('.');
+        return parts[parts.length - 2] + "." + parts[parts.length - 1];
+      }
+
+      return ""
+    })
+    .mapValues((posts: mql.Post[]) => posts.length)
+    .map((v: number, k: string) => {
+      return {host: k, count: v}
+    })
+    .sortBy("count")
+    .reverse()
+    .value();
+};

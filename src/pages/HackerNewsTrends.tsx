@@ -5,6 +5,8 @@ import {Error} from "../components/Error";
 import * as transform from "./HackerNewsTrends/transform";
 import {Chart} from "./HackerNewsTrends/Chart";
 import {AccumulatedChart} from "./HackerNewsTrends/AccumulatedChart";
+import {TopAuthorsChart} from "./HackerNewsTrends/TopAuthorsChart";
+import {TopHostsChart} from "./HackerNewsTrends/TopHostsChart";
 import * as _ from 'lodash';
 import {Warning} from "../components/Warning";
 
@@ -98,6 +100,8 @@ export const HackerNewsTrends: React.FC<Props> = (p: Props) => {
       }
 
       setIsLoading(false);
+
+      console.log(transform.getTopHost(posts));
     };
 
     fetch().catch((reason: any) => {
@@ -166,6 +170,14 @@ export const HackerNewsTrends: React.FC<Props> = (p: Props) => {
         <PostsCharts posts={posts} isMobile={isMobile} totalPoints={totalPoints}
                           totalTotalReplies={totalTotalReplies} domain={domain}/>
         <AccumulatedChartView posts={posts} isMobile={isMobile} domain={domain}/>
+        <div className="row">
+          <div className="col-6">
+            <TopAuthorChartView posts={posts} isMobile={isMobile}/>
+          </div>
+          <div className="col-6">
+            <TopHostsChartView posts={posts} isMobile={isMobile}/>
+          </div>
+        </div>
         <div className="alert alert-success d-md-none" role="alert">
           {renderInfo()}
         </div>
@@ -221,5 +233,47 @@ export const AccumulatedChartView: React.FC<AccumulatedChartViewsProps> = React.
     <span style={{"fontSize": "20px"}}>submissions / points / comments per month</span><br/>
     <br/>
     <AccumulatedChart isMobile={p.isMobile} domain={p.domain} points={monthlyTs}/>
+  </div>
+});
+
+interface TopAuthorChartViewsProps {
+  posts: mql.Post[]
+  isMobile: boolean;
+}
+
+export const TopAuthorChartView: React.FC<TopAuthorChartViewsProps> = React.memo((p: TopAuthorChartViewsProps) => {
+  if (p.posts.length === 0) {
+    return null;
+  }
+
+  let data = transform.getTopPoster(p.posts);
+
+  return <div>
+    <span style={{"fontSize": "20px"}}>Authors</span><br/>
+    <span>total: {data.length}</span><br/>
+    <br/>
+    <span>Top 30</span>
+    <TopAuthorsChart isMobile={p.isMobile} points={data.slice(0, 30)}/>
+  </div>
+});
+
+interface TopHostsChartViewsProps {
+  posts: mql.Post[]
+  isMobile: boolean;
+}
+
+export const TopHostsChartView: React.FC<TopHostsChartViewsProps> = React.memo((p: TopHostsChartViewsProps) => {
+  if (p.posts.length === 0) {
+    return null;
+  }
+
+  let data = transform.getTopHost(p.posts);
+
+  return <div>
+    <span style={{"fontSize": "20px"}}>Hosts</span><br/>
+    <span>total: {data.length}</span><br/>
+    <br/>
+    <span>Top 30</span>
+    <TopHostsChart isMobile={p.isMobile} points={data.slice(0, 30)}/>
   </div>
 });
