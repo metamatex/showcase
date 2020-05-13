@@ -4,6 +4,7 @@ import './HackerNewsUserActivity/style.css';
 import {Error} from "../components/Error";
 import * as transform from "./HackerNewsTrends/transform";
 import {Chart} from "./HackerNewsTrends/Chart";
+import {AccumulatedChart} from "./HackerNewsTrends/AccumulatedChart";
 import * as _ from 'lodash';
 import {Warning} from "../components/Warning";
 
@@ -57,8 +58,6 @@ export const HackerNewsTrends: React.FC<Props> = (p: Props) => {
           pages: next,
         });
 
-        console.log(rsp);
-
         let totalPoints: number = 0;
         let totalReplies: number = 0;
         let totalTotalReplies: number = 0;
@@ -91,8 +90,6 @@ export const HackerNewsTrends: React.FC<Props> = (p: Props) => {
           setWarnings(warnings.concat(rsp.warnings))
         }
 
-        console.log(posts);
-
         if (rsp.pagination && rsp.pagination.next) {
           next = rsp.pagination.next;
         } else {
@@ -105,8 +102,6 @@ export const HackerNewsTrends: React.FC<Props> = (p: Props) => {
 
     fetch().catch((reason: any) => {
       setIsLoading(false);
-
-      console.log(reason);
 
       setErrors([{
         message: reason.message,
@@ -170,6 +165,7 @@ export const HackerNewsTrends: React.FC<Props> = (p: Props) => {
           warning={warning}/>) : null}
         <PostsCharts posts={posts} isMobile={isMobile} totalPoints={totalPoints}
                           totalTotalReplies={totalTotalReplies} domain={domain}/>
+        <AccumulatedChartView posts={posts} isMobile={isMobile} domain={domain}/>
         <div className="alert alert-success d-md-none" role="alert">
           {renderInfo()}
         </div>
@@ -193,8 +189,6 @@ export const PostsCharts: React.FC<PostsChartsProps> = React.memo((p: PostsChart
   }
 
   let postsPerCategory = transform.splitByCategory(p.posts);
-  
-  console.log(postsPerCategory);
 
   let psm = transform.toPointsCommentsTimeseriesMap(postsPerCategory);
 
@@ -207,5 +201,25 @@ export const PostsCharts: React.FC<PostsChartsProps> = React.memo((p: PostsChart
     <br/>
     <span>points</span>
     <Chart isMobile={p.isMobile} domain={p.domain} points={psm}/>
+  </div>
+});
+
+interface AccumulatedChartViewsProps {
+  posts: mql.Post[]
+  isMobile: boolean;
+  domain: any;
+}
+
+export const AccumulatedChartView: React.FC<AccumulatedChartViewsProps> = React.memo((p: AccumulatedChartViewsProps) => {
+  if (p.posts.length === 0) {
+    return null;
+  }
+
+  let monthlyTs = transform.toMonthlyPointsCommentsSubmissionsTimeseries(p.domain, p.posts);
+
+  return <div>
+    <span style={{"fontSize": "20px"}}>submissions / points / comments per month</span><br/>
+    <br/>
+    <AccumulatedChart isMobile={p.isMobile} domain={p.domain} points={monthlyTs}/>
   </div>
 });

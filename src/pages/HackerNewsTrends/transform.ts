@@ -1,35 +1,25 @@
 import * as mql from "../../mql_";
 import * as _ from 'lodash';
+import dayjs from "dayjs";
 
 export const toPointsCommentsTimeseries = (ps: mql.Post[]): { x: number, y: number, z: number, title: string, id: mql.ServiceId }[] => {
   return ps.map((p: mql.Post): { x: number, y: number, z: number, title: string, id: mql.ServiceId } => {
     return {
-      x: p.createdAt && p.createdAt.unix && p.createdAt.unix.value ? p.createdAt.unix.value: 0,
-      y: p.relations && p.relations.favoredBySocialAccounts && p.relations.favoredBySocialAccounts.count ? p.relations.favoredBySocialAccounts.count: 0,
+      x: p.createdAt && p.createdAt.unix && p.createdAt.unix.value ? p.createdAt.unix.value : 0,
+      y: p.relations && p.relations.favoredBySocialAccounts && p.relations.favoredBySocialAccounts.count ? p.relations.favoredBySocialAccounts.count : 0,
       z: p.totalWasRepliedToByPostsCount ? p.totalWasRepliedToByPostsCount : 0,
-      title: p.title && p.title.value ? p.title.value: "",
-      id: p.id ? p.id: {},
+      title: p.title && p.title.value ? p.title.value : "",
+      id: p.id ? p.id : {},
     }
   })
 };
 
-export const toPointsCommentsTimeseriesMap = (psm: {[k: string]: mql.Post[]}): {[k: string]:{ x: number, y: number, z: number }[]} => {
+export const toPointsCommentsTimeseriesMap = (psm: { [k: string]: mql.Post[] }): { [k: string]: { x: number, y: number, z: number }[] } => {
   return _.mapValues(psm, toPointsCommentsTimeseries)
 };
 
-export const toCommentsTimeseries = (ps: mql.Post[]): { x: number, y: number, content: string, id: mql.ServiceId }[] => {
-  return ps.map((p: mql.Post): { x: number, y: number, content: string, id: mql.ServiceId } => {
-    return {
-      x: p.createdAt && p.createdAt.unix && p.createdAt.unix.value ? p.createdAt.unix.value: 0,
-      y: p.relations && p.relations.wasRepliedToByPosts && p.relations.wasRepliedToByPosts.count ? p.relations.wasRepliedToByPosts.count: 0,
-      content: p.content && p.content.value ? p.content.value: "",
-      id: p.id ? p.id: {},
-    }
-  })
-};
-
-export const splitByCategory = (ps: mql.Post[]): { [k: string]:mql.Post[] } => {
-  return _.groupBy(ps, (p: mql.Post):string => {
+export const splitByCategory = (ps: mql.Post[]): { [k: string]: mql.Post[] } => {
+  return _.groupBy(ps, (p: mql.Post): string => {
     if (!p.title || !p.title.value) {
       return ""
     }
@@ -50,9 +40,6 @@ export const splitByCategory = (ps: mql.Post[]): { [k: string]:mql.Post[] } => {
   })
 };
 
-export const serviceIdToString = (id: mql.ServiceId): string => {
-  return id.serviceName + "/" + id.value
-};
 
 export const getTotalPoints = (posts: mql.Post[]): number => {
   return _.reduce(posts, (sum: number, post: mql.Post) => {
@@ -63,7 +50,7 @@ export const getTotalPoints = (posts: mql.Post[]): number => {
 
 export const getTotalReplies = (posts: mql.Post[]): number => {
   return _.reduce(posts, (sum: number, p: mql.Post) => {
-    let a = p.relations && p.relations.wasRepliedToByPosts && p.relations.wasRepliedToByPosts.count ? p.relations.wasRepliedToByPosts.count: 0;
+    let a = p.relations && p.relations.wasRepliedToByPosts && p.relations.wasRepliedToByPosts.count ? p.relations.wasRepliedToByPosts.count : 0;
     return sum + a;
   }, 0)
 };
@@ -76,7 +63,7 @@ export const getTotalTotalReplies = (posts: mql.Post[]): number => {
 };
 
 export const getCreatedAtDomain = (posts: mql.Post[]): number[] => {
-  let accumulator = [0,0];
+  let accumulator = [0, 0];
   if (posts.length === 0) {
     return accumulator
   } else {
@@ -101,23 +88,59 @@ export const getCreatedAtDomain = (posts: mql.Post[]): number[] => {
   }, accumulator)
 };
 
-export const getMaxDomain = (domains: number[][]): number[] => {
-  let accumulator = [0,0];
-  if (domains.length === 0) {
-    return accumulator
-  } else {
-    accumulator = domains[0];
+export const toMonthlyPointsCommentsSubmissionsTimeseries = (domain: number[], ps: mql.Post[]): { points: number, submissions: number, comments: number }[] => {
+  let cursor = dayjs(domain[0] * 1000).startOf('month');
+  let end = dayjs(domain[1] * 1000).endOf('month');
+
+  let months: { [k: string]: { points: number, submissions: number, comments: number, ts: number } } = {};
+  while (cursor.unix() < end.unix()) {
+    months[cursor.valueOf()] = {points: 0, submissions: 0, comments: 0, ts: cursor.valueOf()};
+    cursor = cursor.add(1, 'month').startOf("month");
   }
 
-  return _.reduce(domains, (accumulator: number[], domain: number[]) => {
-    if (domain[0] !== 0 && domain[0] < accumulator[0]) {
-      accumulator[0] = domain[0]
-    }
+  let reduced = _.chain(ps)
+    .groupBy((post: mql.Post) => {
+      if (post.createdAt && post.createdAt.unix && post.createdAt.unix.value) {
+        return dayjs(post.createdAt.unix.value * 1000).startOf('month').valueOf();
+      } else {
+        return ""
+      }
+    })
+    .mapValues((ps: mql.Post[]) => {
+      return _.reduce(ps, (v: { [k: string]: number }, p: mql.Post) => {
+          if (p.relations && p.relations.favoredBySocialAccounts && p.relations.favoredBySocialAccounts.count) {
+            v.points = v.points + p.relations.favoredBySocialAccounts.count;
+          }
 
-    if (domain[1] !== 0 && domain[1] > accumulator[1]) {
-      accumulator[1] = domain[1]
-    }
+          if (p.totalWasRepliedToByPostsCount) {
+            v.comments = v.comments + p.totalWasRepliedToByPostsCount;
+          }
 
-    return accumulator;
-  }, accumulator)
+          v.submissions = v.submissions + 1;
+
+          return v;
+        },
+        {points: 0, submissions: 0, comments: 0, ts: 0}
+      )
+    })
+    .value();
+
+  let merged = _.chain(months)
+    .mapValues((v: { points: number, submissions: number, comments: number, ts: number }) => {
+      if (v.ts in reduced) {
+        return reduced[v.ts];
+      }
+
+      return v
+    })
+    .tap((x) => console.log(x))
+    .map((v: any, k: string) => {
+      v.ts = parseInt(k) / 1000;
+
+      return v
+    })
+    .sortBy('ts')
+    .value() as { points: number, submissions: number, comments: number }[];
+
+  return merged;
 };
