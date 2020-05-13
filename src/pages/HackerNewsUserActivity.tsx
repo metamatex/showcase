@@ -215,6 +215,15 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
     </>
   };
 
+  const renderLikeIt = () => {
+    return <>
+      <h6>Do you like it?</h6>
+      <hr/>
+      <p>Please consider leaving a star on <a target="_blank" rel="noopener " style={{"color": p.color}}
+                                              href="https://github.com/metamatex/metamate">github</a></p>
+    </>
+  };
+
   return <div>
     {errors ? errors.map(error => <Error
       error={error}/>) : null}
@@ -246,6 +255,9 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
         <div className="alert alert-success d-none d-md-block" role="alert">
           {renderInfo()}
         </div>
+        <div className="alert alert-warning d-none d-md-block" role="alert">
+          {renderLikeIt()}
+        </div>
       </div>
       <div className="col-12 col-md-9">
         {authorsPostsWarnings ? authorsPostsWarnings.map(warning => <Warning
@@ -259,6 +271,9 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
         {renderFavoritesChart()}
         <div className="alert alert-success d-md-none" role="alert">
           {renderInfo()}
+        </div>
+        <div className="alert alert-warning d-md-none" role="alert">
+          {renderLikeIt()}
         </div>
       </div>
     </div>
