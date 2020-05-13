@@ -60,9 +60,9 @@ export const AccumulatedChart: React.FC<Props> = React.memo((p: Props) => {
         <YAxis scale="sqrt"/>
         <Tooltip cursor={{strokeDasharray: '3 3'}} labelFormatter={labelFormatter}/>
         <Legend/>
-        <Line type="monotone" dataKey="submissions" stroke="red" strokeWidth={2} dot={{ strokeWidth: 1 }}/>
-        <Line type="monotone" dataKey="points" stroke="green" strokeWidth={2} dot={{ strokeWidth: 1 }}/>
-        <Line type="monotone" dataKey="comments" stroke="blue" strokeWidth={2} dot={{ strokeWidth: 1 }}/>
+        <Line type="monotone" dataKey="submissions" stroke="red" strokeWidth={2} dot={false}/>
+        <Line type="monotone" dataKey="points" stroke="green" strokeWidth={2} dot={false}/>
+        <Line type="monotone" dataKey="comments" stroke="blue" strokeWidth={2} dot={false}/>
       </LineChart>
     </ResponsiveContainer>
   )
