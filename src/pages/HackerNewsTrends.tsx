@@ -220,10 +220,10 @@ export const HackerNewsTrends: React.FC<Props> = (p: Props) => {
                      totalTotalReplies={totalTotalReplies} domain={domain}/>
         <AccumulatedChartView posts={posts} isMobile={isMobile} domain={domain}/>
         <div className="row">
-          <div className="col-6">
+          <div className="col-12 col-md-6">
             <TopAuthorChartView posts={posts} isMobile={isMobile}/>
           </div>
-          <div className="col-6">
+          <div className="col-12 col-md-6">
             <TopHostsChartView posts={posts} isMobile={isMobile}/>
           </div>
         </div>
