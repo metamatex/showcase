@@ -34,6 +34,7 @@ const CustomTooltip = ({active, payload, label}: TooltipProps) => {
   return (
     <div onClick={openNewTab} style={{"background": "#fff", "border": "2px solid #ddd", "padding": "3px", "borderRadius": "5px",}}>
       <p>Title: <a href="#" onClick={openNewTab}>{payload[0]["payload"]["title"]}</a></p>
+      <p>Author: <a href="#" onClick={openNewTab}>{payload[0]["payload"]["author"]}</a></p>
       <p>Date: {dayjs(payload[0]["payload"]["x"] * 1000).format("DD/MM/YYYY")}</p>
       <p>Points: {payload[0]["payload"]["y"]}</p>
       <p>Comments: {payload[0]["payload"]["z"]}</p>

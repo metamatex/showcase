@@ -21,7 +21,7 @@ let c = new mql.Client(opts);
 const routes = {
   '/': () => <App navColor="#1e5dfa" title="Showcase"><Index/></App>,
   '/hackernews-user-activity': () => <App title="HackerNews User Activity" navColor="#FF6601"><HackerNewsUserActivity color="#FF6601" client={c}/></App>,
-  '/hackernews-trends': () => <App title="HackerNews Search" navColor="#FF6601"><HackerNewsTrends color="#FF6601" client={c}/></App>
+  '/hackernews-trends': () => <App title="HackerNews Trends" navColor="#FF6601"><HackerNewsTrends color="#FF6601" client={c}/></App>
 };
 
 const trackInterceptor = (nextPath: string, currentPath: string) => {

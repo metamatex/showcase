@@ -171,7 +171,7 @@ export const PostComponent0: React.FC<Props> = (p: Props) => {
     </li>
     <li>
       Links: {p.post.links ? p.post.links.map((l: mql.HyperLink)=>{
-      return <a target="_blank" rel="noopener noreferrer" href={l.url ? l.url.value:"#"}>{l.label}</a>
+      return <a target="_blank" rel="noopener" href={l.url ? l.url.value:"#"}>{l.label}</a>
     }) : null}
     </li>
 

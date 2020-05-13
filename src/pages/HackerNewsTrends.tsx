@@ -119,6 +119,27 @@ export const HackerNewsTrends: React.FC<Props> = (p: Props) => {
       <h5>How?</h5>
       <p>This app is powered by MetaMate. For the client to obtain all the data it needs, it simply sends the following
         query, and MetaMate aggregates the requested data under the hood</p>
+      <div style={{
+        background: '#ffffff',
+        overflow: 'auto',
+        width: 'auto',
+        fontSize: "14px",
+        border: 'solid gray',
+        borderWidth: '.1em .1em .1em .8em',
+        padding: '.2em .6em'
+      }}>
+        <pre style={{margin: 0, lineHeight: '125%'}}><span
+          style={{color: '#228899', fontWeight: 'bold'}}>let</span> rsp <span style={{color: '#333333'}}>=</span> await p.client.GetPosts({"{"}{"\n"}{"  "}serviceFilter<span
+          style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"    "}id<span
+          style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"      "}value<span
+          style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"        "}is<span style={{color: '#333333'}}>:</span> <span
+          style={{backgroundColor: '#e0e0ff'}}>"hackernews"</span>,{"\n"}{"      "}{"}"}{"\n"}{"    "}{"}"}{"\n"}{"  "}{"}"},{"\n"}{"  "}mode<span
+          style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"    "}search<span
+          style={{color: '#333333'}}>:</span> {"{"}{"\n"}{"      "}term: <span style={{
+          color: '#6666ff',
+          fontWeight: 'bold'
+        }}>term</span>,{"\n"}{"    "}{"}"},{"\n"}{"  "}{"}"},{"\n"}{"}"});{"\n"}</pre>
+      </div>
       <p><a target="_blank" rel="noopener " style={{"color": p.color}} href="https://github.com/metamatex/showcase">Source
         code</a></p>
       <hr/>
@@ -128,16 +149,41 @@ export const HackerNewsTrends: React.FC<Props> = (p: Props) => {
     </>
   };
 
+  const renderLikeIt = () => {
+    return <>
+      <h6>Do you like it?</h6>
+      <hr/>
+      <p>Please consider leaving a star on <a target="_blank" rel="noopener " style={{"color": p.color}}
+                                              href="https://github.com/metamatex/metamate">github</a></p>
+    </>
+  };
+
   return <div>
     {errors ? errors.map(error => <Error
       error={error}/>) : null}
     <div className="row">
       <div className="col-12">
-        <p>Enter a topic to see a trend chart or try&nbsp;
-          <a href="#" onClick={()=> {setTopic("graphql"); loadSearch("graphql")}}>graphql</a>,&nbsp;
-          <a href="#" onClick={()=> {setTopic("terraform"); loadSearch("terraform")}}>terraform</a>,&nbsp;
-          <a href="#" onClick={()=> {setTopic("react"); loadSearch("react")}}>react</a>,&nbsp;
-          <a href="#" onClick={()=> {setTopic("kubernetes"); loadSearch("kubernetes")}}>kubernetes</a>
+        <p>Enter a topic to see statistics, trends charts and leaderboards or try&nbsp;
+          <a href="#" onClick={() => {
+            setTopic("graphql");
+            loadSearch("graphql")
+          }}>graphql</a>,&nbsp;
+          <a href="#" onClick={() => {
+            setTopic("kubernetes");
+            loadSearch("kubernetes")
+          }}>kubernetes</a>,&nbsp;
+          <a href="#" onClick={() => {
+            setTopic("hashicorp.com");
+            loadSearch("hashicorp.com")
+          }}>hashicorp.com</a>,&nbsp;
+          <a href="#" onClick={() => {
+            setTopic("Elon Musk");
+            loadSearch("Elon Musk")
+          }}>Elon Musk</a>,&nbsp;
+          <a href="#" onClick={() => {
+            setTopic("ethereum");
+            loadSearch("ethereum")
+          }}>ethereum</a>
         </p>
       </div>
     </div>
@@ -163,12 +209,15 @@ export const HackerNewsTrends: React.FC<Props> = (p: Props) => {
         <div className="alert alert-success d-none d-md-block" role="alert">
           {renderInfo()}
         </div>
+        <div className="alert alert-warning d-none d-md-block" role="alert">
+          {renderLikeIt()}
+        </div>
       </div>
       <div className="col-12 col-md-9">
         {warnings ? warnings.map(warning => <Warning
           warning={warning}/>) : null}
         <PostsCharts posts={posts} isMobile={isMobile} totalPoints={totalPoints}
-                          totalTotalReplies={totalTotalReplies} domain={domain}/>
+                     totalTotalReplies={totalTotalReplies} domain={domain}/>
         <AccumulatedChartView posts={posts} isMobile={isMobile} domain={domain}/>
         <div className="row">
           <div className="col-6">
@@ -180,6 +229,9 @@ export const HackerNewsTrends: React.FC<Props> = (p: Props) => {
         </div>
         <div className="alert alert-success d-md-none" role="alert">
           {renderInfo()}
+        </div>
+        <div className="alert alert-warning d-md-none" role="alert">
+          {renderLikeIt()}
         </div>
       </div>
     </div>
