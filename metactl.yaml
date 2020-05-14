@@ -1,9 +1,0 @@
-v0:
-  gen:
-    tasks:
-      - template: mql.gotpl
-        out: "src/mql_.ts"
-        dependencies:
-          endpoints:
-            names:
-              or: [GetSocialAccounts, GetPostFeeds, GetPosts]
