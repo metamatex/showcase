@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './static/bootstrap.min.css';
 import {HackerNewsUserActivity} from './pages/HackerNewsUserActivity';
 import {HackerNewsTrends} from './pages/HackerNewsTrends';
-import {Index} from './pages/Index';
+import {Home} from './pages/Home';
 import {App} from './pages/App';
 import {useRoutes, useInterceptor} from 'hookrouter';
 import * as mql from "./mql_";
@@ -12,14 +12,14 @@ import ReactGA from 'react-ga';
 ReactGA.initialize('UA-157292681-1');
 
 let opts: mql.ClientOpts = {
-  addr: (process.env.REACT_APP_HOST ? process.env.REACT_APP_HOST : "http://localhost") + "/httpjson",
+  host: (process.env.REACT_APP_HOST ? process.env.REACT_APP_HOST : "http://localhost"),
   client: axios.create(),
 };
 
 let c = new mql.Client(opts);
 
 const routes = {
-  '/': () => <App navColor="#1e5dfa" title="Showcase"><Index/></App>,
+  '/': () => <App navColor="#1e5dfa" title="Showcase"><Home/></App>,
   '/hackernews-user-activity': () => <App title="HackerNews User Activity" navColor="#FF6601"><HackerNewsUserActivity color="#FF6601" client={c}/></App>,
   '/hackernews-trends': () => <App title="HackerNews Trends" navColor="#FF6601"><HackerNewsTrends color="#FF6601" client={c}/></App>
 };
