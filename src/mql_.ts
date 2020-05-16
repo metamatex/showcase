@@ -3,23 +3,25 @@ import * as axios from 'axios';
 
 export interface ClientOpts {
     client: axios.AxiosInstance;
-    addr: string;
+    host: string;
 }
 
 export class Client {
     opts: ClientOpts;
+    addr: string;
 
     constructor(opts: ClientOpts) {
         this.opts = opts;
+        this.addr = opts.host + "/httpjson";
     }
     
     async GetPostFeeds(req: GetPostFeedsRequest): Promise<GetPostFeedsResponse> {
         let rsp = await this.opts.client.request<GetPostFeedsResponse>({
-            url: this.opts.addr,
+            url: this.addr,
             method: "post",
             data: req,
             headers: {
-                "X-MetaMate-Type": "GetPostFeedsRequest",
+                "X-Asg-type": "GetPostFeedsRequest",
                 "Content-Type": "application/json; charset=utf-8",
             },
         });
@@ -29,11 +31,11 @@ export class Client {
     
     async GetPosts(req: GetPostsRequest): Promise<GetPostsResponse> {
         let rsp = await this.opts.client.request<GetPostsResponse>({
-            url: this.opts.addr,
+            url: this.addr,
             method: "post",
             data: req,
             headers: {
-                "X-MetaMate-Type": "GetPostsRequest",
+                "X-Asg-type": "GetPostsRequest",
                 "Content-Type": "application/json; charset=utf-8",
             },
         });
@@ -43,11 +45,11 @@ export class Client {
     
     async GetSocialAccounts(req: GetSocialAccountsRequest): Promise<GetSocialAccountsResponse> {
         let rsp = await this.opts.client.request<GetSocialAccountsResponse>({
-            url: this.opts.addr,
+            url: this.addr,
             method: "post",
             data: req,
             headers: {
-                "X-MetaMate-Type": "GetSocialAccountsRequest",
+                "X-Asg-type": "GetSocialAccountsRequest",
                 "Content-Type": "application/json; charset=utf-8",
             },
         });
@@ -141,10 +143,6 @@ export const PostKind =  Object.freeze({
     Reply: "reply",
 });
 
-export const ServiceTransport =  Object.freeze({
-    HttpJson: "httpJson",
-});
-
 export const SortKind =  Object.freeze({
     Asc: "asc",
     Desc: "desc",
@@ -220,9 +218,9 @@ export interface AttachmentSort {
     id?: ServiceIdSort;
 }
 
-export interface BlueWhateverFilter {
+export interface BlueDummyFilter {
     alternativeIds?: IdListFilter;
-    and?: BlueWhateverFilter[];
+    and?: BlueDummyFilter[];
     boolField?: BoolFilter;
     boolList?: BoolListFilter;
     createdAt?: TimestampFilter;
@@ -233,19 +231,19 @@ export interface BlueWhateverFilter {
     id?: ServiceIdFilter;
     int32Field?: Int32Filter;
     int32List?: Int32ListFilter;
-    not?: BlueWhateverFilter[];
-    or?: BlueWhateverFilter[];
+    not?: BlueDummyFilter[];
+    or?: BlueDummyFilter[];
     set?: boolean;
     stringField?: StringFilter;
     stringList?: StringListFilter;
-    unionField?: WhateverUnionFilter;
-    unionList?: WhateverUnionListFilter;
+    unionField?: DummyUnionFilter;
+    unionList?: DummyUnionListFilter;
 }
 
-export interface BlueWhateverListFilter {
-    every?: BlueWhateverFilter;
-    none?: BlueWhateverFilter;
-    some?: BlueWhateverFilter;
+export interface BlueDummyListFilter {
+    every?: BlueDummyFilter;
+    none?: BlueDummyFilter;
+    some?: BlueDummyFilter;
 }
 
 export interface BoolFilter {
@@ -301,6 +299,53 @@ export interface CursorPageSelect {
     value?: boolean;
 }
 
+export interface DummyFilter {
+    alternativeIds?: IdListFilter;
+    and?: DummyFilter[];
+    boolField?: BoolFilter;
+    boolList?: BoolListFilter;
+    createdAt?: TimestampFilter;
+    enumField?: EnumFilter;
+    enumList?: EnumListFilter;
+    float64Field?: Float64Filter;
+    float64List?: Float64ListFilter;
+    id?: ServiceIdFilter;
+    int32Field?: Int32Filter;
+    int32List?: Int32ListFilter;
+    not?: DummyFilter[];
+    or?: DummyFilter[];
+    set?: boolean;
+    stringField?: StringFilter;
+    stringList?: StringListFilter;
+    unionField?: DummyUnionFilter;
+    unionList?: DummyUnionListFilter;
+}
+
+export interface DummyListFilter {
+    every?: DummyFilter;
+    none?: DummyFilter;
+    some?: DummyFilter;
+}
+
+export interface DummyUnionFilter {
+    and?: DummyUnionFilter[];
+    boolField?: BoolFilter;
+    enumField?: EnumFilter;
+    float64Field?: Float64Filter;
+    int32Field?: Int32Filter;
+    kind?: EnumFilter;
+    not?: DummyUnionFilter[];
+    or?: DummyUnionFilter[];
+    set?: boolean;
+    stringField?: StringFilter;
+}
+
+export interface DummyUnionListFilter {
+    every?: DummyUnionFilter;
+    none?: DummyUnionFilter;
+    some?: DummyUnionFilter;
+}
+
 export interface DurationScalar {
     isEstimate?: boolean;
     unit?: string;
@@ -348,41 +393,41 @@ export interface EmailSelect {
 
 export interface Endpoints {
     getAttachments?: GetAttachmentsEndpoint;
-    getBlueWhatevers?: GetBlueWhateversEndpoint;
+    getBlueDummies?: GetBlueDummiesEndpoint;
+    getDummies?: GetDummiesEndpoint;
     getPostFeeds?: GetPostFeedsEndpoint;
     getPosts?: GetPostsEndpoint;
     getServices?: GetServicesEndpoint;
     getSocialAccounts?: GetSocialAccountsEndpoint;
-    getWhatevers?: GetWhateversEndpoint;
     lookupService?: LookupServiceEndpoint;
     pipeAttachments?: PipeAttachmentsEndpoint;
-    pipeBlueWhatevers?: PipeBlueWhateversEndpoint;
+    pipeBlueDummies?: PipeBlueDummiesEndpoint;
+    pipeDummies?: PipeDummiesEndpoint;
     pipePostFeeds?: PipePostFeedsEndpoint;
     pipePosts?: PipePostsEndpoint;
     pipeServices?: PipeServicesEndpoint;
     pipeSocialAccounts?: PipeSocialAccountsEndpoint;
-    pipeWhatevers?: PipeWhateversEndpoint;
 }
 
 export interface EndpointsFilter {
     and?: EndpointsFilter[];
     getAttachments?: GetAttachmentsEndpointFilter;
-    getBlueWhatevers?: GetBlueWhateversEndpointFilter;
+    getBlueDummies?: GetBlueDummiesEndpointFilter;
+    getDummies?: GetDummiesEndpointFilter;
     getPostFeeds?: GetPostFeedsEndpointFilter;
     getPosts?: GetPostsEndpointFilter;
     getServices?: GetServicesEndpointFilter;
     getSocialAccounts?: GetSocialAccountsEndpointFilter;
-    getWhatevers?: GetWhateversEndpointFilter;
     lookupService?: LookupServiceEndpointFilter;
     not?: EndpointsFilter[];
     or?: EndpointsFilter[];
     pipeAttachments?: PipeAttachmentsEndpointFilter;
-    pipeBlueWhatevers?: PipeBlueWhateversEndpointFilter;
+    pipeBlueDummies?: PipeBlueDummiesEndpointFilter;
+    pipeDummies?: PipeDummiesEndpointFilter;
     pipePostFeeds?: PipePostFeedsEndpointFilter;
     pipePosts?: PipePostsEndpointFilter;
     pipeServices?: PipeServicesEndpointFilter;
     pipeSocialAccounts?: PipeSocialAccountsEndpointFilter;
-    pipeWhatevers?: PipeWhateversEndpointFilter;
     set?: boolean;
 }
 
@@ -503,34 +548,67 @@ export interface GetAttachmentsResponseFilter {
     warnings?: WarningListFilter;
 }
 
-export interface GetBlueWhateversEndpoint {
-    filter?: GetBlueWhateversRequestFilter;
+export interface GetBlueDummiesEndpoint {
+    filter?: GetBlueDummiesRequestFilter;
 }
 
-export interface GetBlueWhateversEndpointFilter {
-    and?: GetBlueWhateversEndpointFilter[];
-    not?: GetBlueWhateversEndpointFilter[];
-    or?: GetBlueWhateversEndpointFilter[];
+export interface GetBlueDummiesEndpointFilter {
+    and?: GetBlueDummiesEndpointFilter[];
+    not?: GetBlueDummiesEndpointFilter[];
+    or?: GetBlueDummiesEndpointFilter[];
     set?: boolean;
 }
 
-export interface GetBlueWhateversRequestFilter {
-    and?: GetBlueWhateversRequestFilter[];
+export interface GetBlueDummiesRequestFilter {
+    and?: GetBlueDummiesRequestFilter[];
     meta?: RequestMetaFilter;
     mode?: GetModeFilter;
-    not?: GetBlueWhateversRequestFilter[];
-    or?: GetBlueWhateversRequestFilter[];
+    not?: GetBlueDummiesRequestFilter[];
+    or?: GetBlueDummiesRequestFilter[];
     pages?: ServicePageListFilter;
     set?: boolean;
 }
 
-export interface GetBlueWhateversResponseFilter {
-    and?: GetBlueWhateversResponseFilter[];
-    blueWhatevers?: BlueWhateverListFilter;
+export interface GetBlueDummiesResponseFilter {
+    and?: GetBlueDummiesResponseFilter[];
+    blueDummies?: BlueDummyListFilter;
     count?: Int32Filter;
     errors?: ErrorListFilter;
-    not?: GetBlueWhateversResponseFilter[];
-    or?: GetBlueWhateversResponseFilter[];
+    not?: GetBlueDummiesResponseFilter[];
+    or?: GetBlueDummiesResponseFilter[];
+    pagination?: PaginationFilter;
+    set?: boolean;
+    warnings?: WarningListFilter;
+}
+
+export interface GetDummiesEndpoint {
+    filter?: GetDummiesRequestFilter;
+}
+
+export interface GetDummiesEndpointFilter {
+    and?: GetDummiesEndpointFilter[];
+    not?: GetDummiesEndpointFilter[];
+    or?: GetDummiesEndpointFilter[];
+    set?: boolean;
+}
+
+export interface GetDummiesRequestFilter {
+    and?: GetDummiesRequestFilter[];
+    meta?: RequestMetaFilter;
+    mode?: GetModeFilter;
+    not?: GetDummiesRequestFilter[];
+    or?: GetDummiesRequestFilter[];
+    pages?: ServicePageListFilter;
+    set?: boolean;
+}
+
+export interface GetDummiesResponseFilter {
+    and?: GetDummiesResponseFilter[];
+    count?: Int32Filter;
+    dummies?: DummyListFilter;
+    errors?: ErrorListFilter;
+    not?: GetDummiesResponseFilter[];
+    or?: GetDummiesResponseFilter[];
     pagination?: PaginationFilter;
     set?: boolean;
     warnings?: WarningListFilter;
@@ -841,39 +919,6 @@ export interface GetSocialAccountsResponseSelect {
     pagination?: PaginationSelect;
     socialAccounts?: SocialAccountSelect;
     warnings?: WarningSelect;
-}
-
-export interface GetWhateversEndpoint {
-    filter?: GetWhateversRequestFilter;
-}
-
-export interface GetWhateversEndpointFilter {
-    and?: GetWhateversEndpointFilter[];
-    not?: GetWhateversEndpointFilter[];
-    or?: GetWhateversEndpointFilter[];
-    set?: boolean;
-}
-
-export interface GetWhateversRequestFilter {
-    and?: GetWhateversRequestFilter[];
-    meta?: RequestMetaFilter;
-    mode?: GetModeFilter;
-    not?: GetWhateversRequestFilter[];
-    or?: GetWhateversRequestFilter[];
-    pages?: ServicePageListFilter;
-    set?: boolean;
-}
-
-export interface GetWhateversResponseFilter {
-    and?: GetWhateversResponseFilter[];
-    count?: Int32Filter;
-    errors?: ErrorListFilter;
-    not?: GetWhateversResponseFilter[];
-    or?: GetWhateversResponseFilter[];
-    pagination?: PaginationFilter;
-    set?: boolean;
-    warnings?: WarningListFilter;
-    whatevers?: WhateverListFilter;
 }
 
 export interface HyperLink {
@@ -1211,32 +1256,61 @@ export interface PipeAttachmentsRequestFilter {
     set?: boolean;
 }
 
-export interface PipeBlueWhateversContextFilter {
-    and?: PipeBlueWhateversContextFilter[];
-    get?: PipeGetBlueWhateversContextFilter;
-    not?: PipeBlueWhateversContextFilter[];
-    or?: PipeBlueWhateversContextFilter[];
+export interface PipeBlueDummiesContextFilter {
+    and?: PipeBlueDummiesContextFilter[];
+    get?: PipeGetBlueDummiesContextFilter;
+    not?: PipeBlueDummiesContextFilter[];
+    or?: PipeBlueDummiesContextFilter[];
     set?: boolean;
 }
 
-export interface PipeBlueWhateversEndpoint {
-    filter?: PipeBlueWhateversRequestFilter;
+export interface PipeBlueDummiesEndpoint {
+    filter?: PipeBlueDummiesRequestFilter;
 }
 
-export interface PipeBlueWhateversEndpointFilter {
-    and?: PipeBlueWhateversEndpointFilter[];
-    not?: PipeBlueWhateversEndpointFilter[];
-    or?: PipeBlueWhateversEndpointFilter[];
+export interface PipeBlueDummiesEndpointFilter {
+    and?: PipeBlueDummiesEndpointFilter[];
+    not?: PipeBlueDummiesEndpointFilter[];
+    or?: PipeBlueDummiesEndpointFilter[];
     set?: boolean;
 }
 
-export interface PipeBlueWhateversRequestFilter {
-    and?: PipeBlueWhateversRequestFilter[];
-    context?: PipeBlueWhateversContextFilter;
+export interface PipeBlueDummiesRequestFilter {
+    and?: PipeBlueDummiesRequestFilter[];
+    context?: PipeBlueDummiesContextFilter;
     meta?: RequestMetaFilter;
     mode?: PipeModeFilter;
-    not?: PipeBlueWhateversRequestFilter[];
-    or?: PipeBlueWhateversRequestFilter[];
+    not?: PipeBlueDummiesRequestFilter[];
+    or?: PipeBlueDummiesRequestFilter[];
+    set?: boolean;
+}
+
+export interface PipeDummiesContextFilter {
+    and?: PipeDummiesContextFilter[];
+    get?: PipeGetDummiesContextFilter;
+    not?: PipeDummiesContextFilter[];
+    or?: PipeDummiesContextFilter[];
+    set?: boolean;
+}
+
+export interface PipeDummiesEndpoint {
+    filter?: PipeDummiesRequestFilter;
+}
+
+export interface PipeDummiesEndpointFilter {
+    and?: PipeDummiesEndpointFilter[];
+    not?: PipeDummiesEndpointFilter[];
+    or?: PipeDummiesEndpointFilter[];
+    set?: boolean;
+}
+
+export interface PipeDummiesRequestFilter {
+    and?: PipeDummiesRequestFilter[];
+    context?: PipeDummiesContextFilter;
+    meta?: RequestMetaFilter;
+    mode?: PipeModeFilter;
+    not?: PipeDummiesRequestFilter[];
+    or?: PipeDummiesRequestFilter[];
     set?: boolean;
 }
 
@@ -1251,14 +1325,25 @@ export interface PipeGetAttachmentsContextFilter {
     set?: boolean;
 }
 
-export interface PipeGetBlueWhateversContextFilter {
-    and?: PipeGetBlueWhateversContextFilter[];
-    clientRequest?: GetBlueWhateversRequestFilter;
-    clientResponse?: GetBlueWhateversResponseFilter;
-    not?: PipeGetBlueWhateversContextFilter[];
-    or?: PipeGetBlueWhateversContextFilter[];
-    serviceRequest?: GetBlueWhateversRequestFilter;
-    serviceResponse?: GetBlueWhateversResponseFilter;
+export interface PipeGetBlueDummiesContextFilter {
+    and?: PipeGetBlueDummiesContextFilter[];
+    clientRequest?: GetBlueDummiesRequestFilter;
+    clientResponse?: GetBlueDummiesResponseFilter;
+    not?: PipeGetBlueDummiesContextFilter[];
+    or?: PipeGetBlueDummiesContextFilter[];
+    serviceRequest?: GetBlueDummiesRequestFilter;
+    serviceResponse?: GetBlueDummiesResponseFilter;
+    set?: boolean;
+}
+
+export interface PipeGetDummiesContextFilter {
+    and?: PipeGetDummiesContextFilter[];
+    clientRequest?: GetDummiesRequestFilter;
+    clientResponse?: GetDummiesResponseFilter;
+    not?: PipeGetDummiesContextFilter[];
+    or?: PipeGetDummiesContextFilter[];
+    serviceRequest?: GetDummiesRequestFilter;
+    serviceResponse?: GetDummiesResponseFilter;
     set?: boolean;
 }
 
@@ -1303,17 +1388,6 @@ export interface PipeGetSocialAccountsContextFilter {
     or?: PipeGetSocialAccountsContextFilter[];
     serviceRequest?: GetSocialAccountsRequestFilter;
     serviceResponse?: GetSocialAccountsResponseFilter;
-    set?: boolean;
-}
-
-export interface PipeGetWhateversContextFilter {
-    and?: PipeGetWhateversContextFilter[];
-    clientRequest?: GetWhateversRequestFilter;
-    clientResponse?: GetWhateversResponseFilter;
-    not?: PipeGetWhateversContextFilter[];
-    or?: PipeGetWhateversContextFilter[];
-    serviceRequest?: GetWhateversRequestFilter;
-    serviceResponse?: GetWhateversResponseFilter;
     set?: boolean;
 }
 
@@ -1439,35 +1513,6 @@ export interface PipeSocialAccountsRequestFilter {
     mode?: PipeModeFilter;
     not?: PipeSocialAccountsRequestFilter[];
     or?: PipeSocialAccountsRequestFilter[];
-    set?: boolean;
-}
-
-export interface PipeWhateversContextFilter {
-    and?: PipeWhateversContextFilter[];
-    get?: PipeGetWhateversContextFilter;
-    not?: PipeWhateversContextFilter[];
-    or?: PipeWhateversContextFilter[];
-    set?: boolean;
-}
-
-export interface PipeWhateversEndpoint {
-    filter?: PipeWhateversRequestFilter;
-}
-
-export interface PipeWhateversEndpointFilter {
-    and?: PipeWhateversEndpointFilter[];
-    not?: PipeWhateversEndpointFilter[];
-    or?: PipeWhateversEndpointFilter[];
-    set?: boolean;
-}
-
-export interface PipeWhateversRequestFilter {
-    and?: PipeWhateversRequestFilter[];
-    context?: PipeWhateversContextFilter;
-    meta?: RequestMetaFilter;
-    mode?: PipeModeFilter;
-    not?: PipeWhateversRequestFilter[];
-    or?: PipeWhateversRequestFilter[];
     set?: boolean;
 }
 
@@ -1749,7 +1794,6 @@ export interface Service {
     name?: string;
     port?: number;
     sdkVersion?: string;
-    transport?: string;
     url?: Url;
 }
 
@@ -1766,7 +1810,6 @@ export interface ServiceFilter {
     port?: Int32Filter;
     sdkVersion?: StringFilter;
     set?: boolean;
-    transport?: EnumFilter;
     url?: UrlFilter;
 }
 
@@ -1836,7 +1879,6 @@ export interface ServiceSelect {
     name?: boolean;
     port?: boolean;
     sdkVersion?: boolean;
-    transport?: boolean;
     url?: UrlSelect;
 }
 
@@ -2101,51 +2143,4 @@ export interface WarningListFilter {
 export interface WarningSelect {
     all?: boolean;
     message?: boolean;
-}
-
-export interface WhateverFilter {
-    alternativeIds?: IdListFilter;
-    and?: WhateverFilter[];
-    boolField?: BoolFilter;
-    boolList?: BoolListFilter;
-    createdAt?: TimestampFilter;
-    enumField?: EnumFilter;
-    enumList?: EnumListFilter;
-    float64Field?: Float64Filter;
-    float64List?: Float64ListFilter;
-    id?: ServiceIdFilter;
-    int32Field?: Int32Filter;
-    int32List?: Int32ListFilter;
-    not?: WhateverFilter[];
-    or?: WhateverFilter[];
-    set?: boolean;
-    stringField?: StringFilter;
-    stringList?: StringListFilter;
-    unionField?: WhateverUnionFilter;
-    unionList?: WhateverUnionListFilter;
-}
-
-export interface WhateverListFilter {
-    every?: WhateverFilter;
-    none?: WhateverFilter;
-    some?: WhateverFilter;
-}
-
-export interface WhateverUnionFilter {
-    and?: WhateverUnionFilter[];
-    boolField?: BoolFilter;
-    enumField?: EnumFilter;
-    float64Field?: Float64Filter;
-    int32Field?: Int32Filter;
-    kind?: EnumFilter;
-    not?: WhateverUnionFilter[];
-    or?: WhateverUnionFilter[];
-    set?: boolean;
-    stringField?: StringFilter;
-}
-
-export interface WhateverUnionListFilter {
-    every?: WhateverUnionFilter;
-    none?: WhateverUnionFilter;
-    some?: WhateverUnionFilter;
 }

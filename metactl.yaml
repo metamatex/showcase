@@ -1,0 +1,19 @@
+# this file is used by metactl to generate client and service sdks
+#
+# available sdks:
+#
+# go-client: go client sdk
+# go-service: go server sdk
+# typescript-client: typescript client sdk
+
+v0:
+  gen:
+    sdks:
+    - name: typescript-client
+      args:
+        path: src
+      endpoints:
+        - GetPostFeeds
+        - GetSocialAccounts
+        - GetPosts
+ 
