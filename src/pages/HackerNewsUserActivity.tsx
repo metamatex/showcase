@@ -206,8 +206,7 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
           style={{color: '#333333'}}>:</span> {"{"}{"}"},{"\n"}{"    "}bookmarksPosts<span
           style={{color: '#333333'}}>:</span> {"{"}{"}"},{"\n"}{"  "}{"}"}{"\n"}{"}"});{"\n"}</pre>
       </div>
-      <p><a target="_blank" rel="noopener " style={{"color": p.color}} href="https://github.com/metamatex/showcase">Source
-        code</a></p>
+      <p><a target="_blank" rel="noopener " style={{"color": p.color}} href="https://metamate.io/docs/0.1/how-to-build-an-application-with-metamate/">How to build applications with MetaMate</a></p>
       <hr/>
       <p>Check out MetaMate's HackerNews service here: <a target="_blank" rel="noopener " style={{"color": p.color}}
                                                           href="https://metamate.io/blog/most-advanced-hackernews-api/">Most
@@ -219,8 +218,10 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
     return <>
       <h6>Do you like it?</h6>
       <hr/>
-      <p>Please consider leaving a star on <a target="_blank" rel="noopener " style={{"color": p.color}}
-                                              href="https://github.com/metamatex/metamate">github</a></p>
+      <p>Leave a star on <a target="_blank" rel="noopener " style={{"color": p.color}}
+                            href="https://github.com/metamatex/metamate">github</a></p>
+      <p>Follow us on <a target="_blank" rel="noopener " style={{"color": p.color}}
+                         href="https://twitter.com/metamatex">twitter</a></p>
     </>
   };
 
@@ -252,11 +253,11 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
           </div>
         </div>
         {renderProfile()}
-        <div className="alert alert-success d-none d-md-block" role="alert">
-          {renderInfo()}
-        </div>
         <div className="alert alert-warning d-none d-md-block" role="alert">
           {renderLikeIt()}
+        </div>
+        <div className="alert alert-success d-none d-md-block" role="alert">
+          {renderInfo()}
         </div>
       </div>
       <div className="col-12 col-md-9">
@@ -269,11 +270,11 @@ export const HackerNewsUserActivity: React.FC<Props> = (p: Props) => {
         {bookmarksPostsWarnings ? bookmarksPostsWarnings.map(warning => <Warning
           warning={warning}/>) : null}
         {renderFavoritesChart()}
-        <div className="alert alert-success d-md-none" role="alert">
-          {renderInfo()}
-        </div>
         <div className="alert alert-warning d-md-none" role="alert">
           {renderLikeIt()}
+        </div>
+        <div className="alert alert-success d-md-none" role="alert">
+          {renderInfo()}
         </div>
       </div>
     </div>
