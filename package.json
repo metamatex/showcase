@@ -14,7 +14,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/recharts": "^1.8.9",
     "@types/yaml": "^1.2.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "dayjs": "^1.8.24",
     "hookrouter": "^1.2.3",
     "lodash": "^4.17.15",
