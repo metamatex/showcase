@@ -18,7 +18,7 @@
     "dayjs": "^1.8.24",
     "hookrouter": "^1.2.3",
     "lodash": "^4.17.15",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-ga": "^2.7.0",
